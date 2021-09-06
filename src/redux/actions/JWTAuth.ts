@@ -1,4 +1,7 @@
-import jwtAxios from '../../@crema/services/auth/jwt-auth/jwt-api';
+import jwtAxios, {
+  parseJWT,
+  refreshToken,
+} from '../../@crema/services/auth/jwt-auth/jwt-api';
 import {fetchError, fetchStart, fetchSuccess} from './Common';
 import {AuthType} from '../../shared/constants/AppEnums';
 import {defaultUser} from '../../shared/constants/AppConst';
@@ -11,6 +14,7 @@ import {
   UPDATE_AUTH_USER,
 } from '../../types/actions/Auth.actions';
 
+// ! this link comes from an email -- redirect to site? This will take the query params and asset it into the axios post
 export const onJwtUserSignUp = (body: {
   email: string;
   password: string;
@@ -34,7 +38,7 @@ export const onJwtSignIn = (body: {email: string; password: string}) => {
   return async (dispatch: Dispatch<AppActions>) => {
     dispatch(fetchStart());
     try {
-      const res = await jwtAxios.post('auth', body);
+      const res = await jwtAxios.post('login', body);
       localStorage.setItem('token', res.data.token);
       dispatch(setJWTToken(res.data.token));
       await loadJWTUser(dispatch);
@@ -48,7 +52,16 @@ export const onJwtSignIn = (body: {email: string; password: string}) => {
 export const loadJWTUser = async (dispatch: Dispatch<AppActions>) => {
   dispatch(fetchStart());
   try {
-    const res = await jwtAxios.get('/auth');
+    const token = localStorage.getItem('token');
+    const decoded = parseJWT(token);
+
+    if (!decoded) {
+      console.log('FAILED TO LOAD USER');
+      return;
+      // return onJWTAuthSignout();
+    }
+
+    const res = await jwtAxios.get(`user/${decoded.id}`);
     dispatch(fetchSuccess());
     console.log('res.data', res.data);
     dispatch({
@@ -72,19 +85,26 @@ const getUserObject = (authUser: any): AuthUser => {
     displayName: authUser.name,
     email: authUser.email,
     role: defaultUser.role,
-    token: authUser._id,
-    uid: authUser._id,
+    token: authUser.id,
+    id: authUser.id,
     photoURL: authUser.avatar,
+    accountId: authUser.account_id,
   };
 };
 
 export const onJWTAuthSignout = () => {
-  return (dispatch: Dispatch<AppActions>) => {
+  return async (dispatch: Dispatch<AppActions>) => {
     dispatch(fetchSuccess());
-    setTimeout(() => {
-      dispatch({type: SIGNOUT_AUTH_SUCCESS});
-      dispatch(fetchSuccess());
-      localStorage.removeItem('token');
-    }, 500);
+    try {
+      await jwtAxios.delete('logout');
+      setTimeout(() => {
+        dispatch({type: SIGNOUT_AUTH_SUCCESS});
+        dispatch(fetchSuccess());
+        localStorage.removeItem('token');
+      }, 500);
+    } catch (err) {
+      console.log('error!!!!', err);
+      dispatch(fetchError(err.response.error));
+    }
   };
 };

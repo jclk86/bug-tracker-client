@@ -37,11 +37,11 @@ const getUserObject = (authUser: any): AuthUser => {
   return {
     authType: AuthType.AUTH0,
     role: defaultUser.role,
-    uid: authUser.sub,
+    id: authUser.id,
     displayName: authUser.name,
     email: authUser.email,
     photoURL: authUser.picture,
-    token: authUser.sub,
+    token: authUser.id,
   };
 };
 

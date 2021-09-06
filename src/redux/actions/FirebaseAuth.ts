@@ -25,11 +25,11 @@ export const onSignUpFirebaseUser = ({
     try {
       auth
         .createUserWithEmailAndPassword(email, password)
-        .then(data => {
+        .then((data) => {
           dispatch(fetchSuccess());
           dispatch({type: UPDATE_AUTH_USER, payload: getUserObject(data)});
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(fetchError(error.message));
         });
     } catch (error) {
@@ -44,11 +44,11 @@ export const onForgetPasswordFirebaseUser = (email: string) => {
     try {
       auth
         .sendPasswordResetEmail(email)
-        .then(data => {
+        .then((data) => {
           dispatch(fetchSuccess());
           // dispatch({type: UPDATE_AUTH_USER, payload: data});
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(fetchError(error.message));
         });
     } catch (error) {
@@ -83,7 +83,7 @@ const getUserObject = (authUser: any): AuthUser => {
   return {
     authType: AuthType.FIREBASE,
     role: defaultUser.role,
-    uid: authUser.uid,
+    id: authUser.id,
     displayName: authUser.displayName,
     email: authUser.email,
     photoURL: authUser.photoURL,
@@ -97,14 +97,14 @@ export const onSignInFirebaseUser = (email: string, password: string) => {
       dispatch(fetchStart());
       auth
         .signInWithEmailAndPassword(email, password)
-        .then(data => {
+        .then((data) => {
           dispatch(fetchSuccess());
           dispatch({
             type: UPDATE_AUTH_USER,
             payload: getUserObject(data),
           });
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(fetchError(error.message));
         });
     } catch (error) {
@@ -119,11 +119,11 @@ export const onSignOutFirebaseUser = () => {
     try {
       auth
         .signOut()
-        .then(data => {
+        .then((data) => {
           dispatch(fetchSuccess());
           dispatch({type: UPDATE_AUTH_USER, payload: null});
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(fetchError(error.message));
         });
     } catch (error) {
@@ -138,11 +138,11 @@ export const signInUserWithGoogle = () => {
     try {
       auth
         .signInWithPopup(googleAuthProvider)
-        .then(data => {
+        .then((data) => {
           dispatch(fetchSuccess());
           dispatch({type: UPDATE_AUTH_USER, payload: getUserObject(data.user)});
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(fetchError(error.message));
         });
     } catch (error) {
@@ -156,11 +156,11 @@ export const signInUserWithGithub = () => {
     try {
       auth
         .signInWithPopup(githubAuthProvider)
-        .then(data => {
+        .then((data) => {
           dispatch(fetchSuccess());
           dispatch({type: UPDATE_AUTH_USER, payload: getUserObject(data.user)});
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(fetchError(error.message));
         });
     } catch (error) {
@@ -175,11 +175,11 @@ export const signInUserWithFacebook = () => {
     try {
       auth
         .signInWithPopup(facebookAuthProvider)
-        .then(data => {
+        .then((data) => {
           dispatch(fetchSuccess());
           dispatch({type: UPDATE_AUTH_USER, payload: getUserObject(data.user)});
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(fetchError(error.message));
         });
     } catch (error) {
@@ -194,11 +194,11 @@ export const signInUserWithTwitter = () => {
     try {
       auth
         .signInWithPopup(twitterAuthProvider)
-        .then(data => {
+        .then((data) => {
           dispatch(fetchSuccess());
           dispatch({type: UPDATE_AUTH_USER, payload: getUserObject(data.user)});
         })
-        .catch(error => {
+        .catch((error) => {
           dispatch(fetchError(error.message));
         });
     } catch (error) {

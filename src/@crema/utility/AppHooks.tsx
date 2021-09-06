@@ -14,6 +14,7 @@ import jwtAxios from '../services/auth/jwt-auth/jwt-api';
 import {AppState} from '../../redux/store';
 import {UPDATE_AUTH_USER} from '../../types/actions/Auth.actions';
 import {AuthUser} from '../../types/models/AuthUser';
+import {parseJWT} from '../services/auth/jwt-auth/jwt-api';
 
 export const useAuthToken = (): [boolean, AuthUser | null] => {
   const dispatch = useDispatch();
@@ -22,10 +23,10 @@ export const useAuthToken = (): [boolean, AuthUser | null] => {
 
   useEffect(() => {
     const awsAuthUser = () =>
-      new Promise(resolve => {
+      new Promise<void>((resolve) => {
         awsAuth
           .currentAuthenticatedUser()
-          .then(user => {
+          .then((user) => {
             resolve();
             if (user) {
               dispatch({
@@ -42,15 +43,15 @@ export const useAuthToken = (): [boolean, AuthUser | null] => {
               });
             }
           })
-          .catch(function(error) {
+          .catch(function (error) {
             resolve();
           });
         return Promise.resolve();
       });
 
     const firebaseCheck = () =>
-      new Promise(resolve => {
-        firebaseAuth.onAuthStateChanged(authUser => {
+      new Promise<void>((resolve) => {
+        firebaseAuth.onAuthStateChanged((authUser) => {
           if (authUser) {
             dispatch({
               type: UPDATE_AUTH_USER,
@@ -77,19 +78,27 @@ export const useAuthToken = (): [boolean, AuthUser | null] => {
         dispatch(fetchSuccess());
         return;
       }
+
+      const decoded = parseJWT(token);
+      if (!decoded) {
+        console.log('FAILED TO decode: SERVER PROBLEM', decoded);
+        return;
+      }
+
       dispatch(setJWTToken(token));
       try {
-        const res = await jwtAxios.get('/auth');
+        const res = await jwtAxios.get(`user/${decoded.id}`);
         dispatch(fetchSuccess());
         dispatch({
           type: UPDATE_AUTH_USER,
           payload: {
             authType: AuthType.JWT_AUTH,
-            displayName: res.data.name,
+            displayName: res.data.first_name + ' ' + res.data.last_name,
             email: res.data.email,
             role: defaultUser.role,
-            token: res.data._id,
+            token: res.data.id,
             photoURL: res.data.avatar,
+            accountId: res.data.account_id,
           },
         });
         return;

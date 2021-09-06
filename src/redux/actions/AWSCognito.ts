@@ -150,7 +150,7 @@ const getUserObject = (authUser: any): AuthUser => {
   return {
     authType: AuthType.AWS_COGNITO,
     role: defaultUser.role,
-    uid: authUser.username,
+    id: authUser.username,
     displayName: authUser.attributes.name,
     email: authUser.attributes.email,
     photoURL: authUser.photoURL,
