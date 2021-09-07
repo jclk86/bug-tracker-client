@@ -42,6 +42,7 @@ export const onJwtSignIn = (body: {email: string; password: string}) => {
       localStorage.setItem('token', res.data.token);
       dispatch(setJWTToken(res.data.token));
       await loadJWTUser(dispatch);
+      refreshToken();
     } catch (err) {
       console.log('error!!!!', err.response.data.error);
       dispatch(fetchError(err.response.data.error));

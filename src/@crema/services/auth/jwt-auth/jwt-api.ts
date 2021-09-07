@@ -41,6 +41,7 @@ let refreshTimeOutId: ReturnType<typeof setTimeout>;
 
 export const refreshToken = (delay?: number) => {
   refreshTimeOutId = setTimeout(postRefreshToken, 10000);
+  console.log('refrehsTimeOutId: ', refreshTimeOutId);
 };
 
 const postRefreshToken = () => {
