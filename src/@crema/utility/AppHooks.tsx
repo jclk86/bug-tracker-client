@@ -6,15 +6,15 @@ import {
   fetchStart,
   fetchSuccess,
   onGetLoggedInCognitoUser,
-  setJWTToken,
 } from '../../redux/actions';
 import {AuthType} from '../../shared/constants/AppEnums';
 import {defaultUser} from '../../shared/constants/AppConst';
-import jwtAxios from '../services/auth/jwt-auth/jwt-api';
+import jwtAxios, {setAuthToken} from '../services/auth/jwt-auth/jwt-api';
 import {AppState} from '../../redux/store';
 import {UPDATE_AUTH_USER} from '../../types/actions/Auth.actions';
 import {AuthUser} from '../../types/models/AuthUser';
-import {parseJWT} from '../services/auth/jwt-auth/jwt-api';
+import {setJWTToken, loadJWTUser} from 'redux/actions/JWTAuth';
+import jwtManager from '@crema/services/auth/jwt-auth/jwtManager';
 
 export const useAuthToken = (): [boolean, AuthUser | null] => {
   const dispatch = useDispatch();
@@ -73,34 +73,39 @@ export const useAuthToken = (): [boolean, AuthUser | null] => {
 
     const validateAuth = async () => {
       dispatch(fetchStart());
-      const token = localStorage.getItem('token');
+      let token = localStorage.getItem('token');
       if (!token) {
         dispatch(fetchSuccess());
         return;
       }
 
-      const decoded = parseJWT(token);
-      if (!decoded) {
-        console.log('FAILED TO decode: SERVER PROBLEM', decoded);
-        return;
-      }
-
-      dispatch(setJWTToken(token));
       try {
-        const res = await jwtAxios.get(`user/${decoded.id}`);
-        dispatch(fetchSuccess());
-        dispatch({
-          type: UPDATE_AUTH_USER,
-          payload: {
-            authType: AuthType.JWT_AUTH,
-            displayName: res.data.first_name + ' ' + res.data.last_name,
-            email: res.data.email,
-            role: defaultUser.role,
-            token: res.data.id,
-            photoURL: res.data.avatar,
-            accountId: res.data.account_id,
-          },
-        });
+        await loadJWTUser(dispatch);
+        // if reload, set the token in axios request header.
+        // setAuthToken(token);
+        // const decoded = jwtManager.parseJWT(token);
+        // if (!decoded) {
+        //   console.log('FAILED TO decode: SERVER PROBLEM', decoded);
+        //   return;
+        // }
+
+        // try {
+        //   const res = await jwtAxios.get(`user/${decoded.id}`);
+        //   dispatch(fetchSuccess());
+        //   dispatch({
+        //     type: UPDATE_AUTH_USER,
+        //     payload: {
+        //       authType: AuthType.JWT_AUTH,
+        //       displayName: res.data.first_name + ' ' + res.data.last_name,
+        //       email: res.data.email,
+        //       role: defaultUser.role,
+        //       token: res.data.id,
+        //       photoURL: res.data.avatar,
+        //       accountId: res.data.account_id,
+        //     },
+        //   });
+        // dispatch(setJWTToken(token));
+        // jwtManager.refreshToken();
         return;
       } catch (err) {
         dispatch(fetchSuccess());

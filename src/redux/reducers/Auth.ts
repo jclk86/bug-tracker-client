@@ -23,6 +23,7 @@ const Auth = (state = INIT_STATE, action: AppActions) => {
       return {
         ...state,
         user: null,
+        token: null, // ! needed?
       };
     }
     case SET_AUTH_TOKEN: {

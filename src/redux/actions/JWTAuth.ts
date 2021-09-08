@@ -1,7 +1,5 @@
-import jwtAxios, {
-  parseJWT,
-  refreshToken,
-} from '../../@crema/services/auth/jwt-auth/jwt-api';
+import jwtAxios from '@crema/services/auth/jwt-auth/jwt-api';
+import jwtManager from '@crema/services/auth/jwt-auth/jwtManager';
 import {fetchError, fetchStart, fetchSuccess} from './Common';
 import {AuthType} from '../../shared/constants/AppEnums';
 import {defaultUser} from '../../shared/constants/AppConst';
@@ -42,7 +40,6 @@ export const onJwtSignIn = (body: {email: string; password: string}) => {
       localStorage.setItem('token', res.data.token);
       dispatch(setJWTToken(res.data.token));
       await loadJWTUser(dispatch);
-      refreshToken();
     } catch (err) {
       console.log('error!!!!', err.response.data.error);
       dispatch(fetchError(err.response.data.error));
@@ -52,23 +49,29 @@ export const onJwtSignIn = (body: {email: string; password: string}) => {
 
 export const loadJWTUser = async (dispatch: Dispatch<AppActions>) => {
   dispatch(fetchStart());
+  const token = localStorage.getItem('token');
+  if (!token) {
+    dispatch(fetchSuccess());
+    return;
+  }
+
+  const decoded = jwtManager.parseJWT(token);
+  if (!decoded) return onJWTAuthSignout();
+
   try {
-    const token = localStorage.getItem('token');
-    const decoded = parseJWT(token);
-
-    if (!decoded) {
-      console.log('FAILED TO LOAD USER');
-      return;
-      // return onJWTAuthSignout();
-    }
-
+    // const token = localStorage.getItem('token');
+    // const decoded = jwtManager.parseJWT(token);
+    // if (!decoded) return onJWTAuthSignout();
     const res = await jwtAxios.get(`user/${decoded.id}`);
     dispatch(fetchSuccess());
-    console.log('res.data', res.data);
     dispatch({
       type: UPDATE_AUTH_USER,
       payload: getUserObject(res.data),
     });
+    dispatch(setJWTToken(token)); // ! added
+    // initiates token refresh, even when page is reloaded
+    // Do not 'await', as loading will last as long as timeout does.
+    jwtManager.refreshToken();
   } catch (err) {
     console.log('error!!!!', err.response.error);
     dispatch(fetchError(err.response.error));
@@ -80,10 +83,10 @@ export const setJWTToken = (token: string | null): AppActions => ({
   payload: token,
 });
 
-const getUserObject = (authUser: any): AuthUser => {
+export const getUserObject = (authUser: any): AuthUser => {
   return {
     authType: AuthType.JWT_AUTH,
-    displayName: authUser.name,
+    displayName: authUser.first_name + ' ' + authUser.last_name,
     email: authUser.email,
     role: defaultUser.role,
     token: authUser.id,
@@ -101,7 +104,7 @@ export const onJWTAuthSignout = () => {
       setTimeout(() => {
         dispatch({type: SIGNOUT_AUTH_SUCCESS});
         dispatch(fetchSuccess());
-        localStorage.removeItem('token');
+        jwtManager.eraseToken();
       }, 500);
     } catch (err) {
       console.log('error!!!!', err);
