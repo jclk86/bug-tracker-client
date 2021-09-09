@@ -35,7 +35,7 @@ class AppErrorBoundary extends React.Component<{}, {hasError: boolean}> {
             Brace yourself till we get the error fixed.
           </Box>
           <Box fontSize={18} textAlign='center'>
-            You may also refresh the page or try again latter
+            You may also refresh the page or try again later
           </Box>
         </Box>
       );

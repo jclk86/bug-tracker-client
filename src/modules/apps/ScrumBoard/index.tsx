@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 import {onGetMemberList, onGetScrumLabelList} from '../../../redux/actions';
 import BoardDetail from './BoardDetail';
@@ -17,12 +18,33 @@ const ScrumBoard = () => {
   const {user} = useSelector<AppState, AppState['auth']>(({auth}) => auth);
 
   useEffect(() => {
+    let source = axios.CancelToken.source();
+
+    // ! need to catch error with try catch for async
     dispatch(onGetScrumLabelList());
     async function getData() {
-      const response = await jwtAxios.get(`users/account/${user?.accountId}`);
-      console.log(response);
+      try {
+        const response = await jwtAxios.get(
+          `users/account/${user?.accountId}`,
+          {
+            cancelToken: source.token,
+          },
+        );
+        console.log('scrumboard user data: ', response);
+      } catch (err) {
+        if (axios.isCancel(err)) {
+          console.log('caught cancel in Scumboard');
+        } else {
+          throw err;
+        }
+      }
     }
     getData();
+
+    return () => {
+      console.log('unmounting in scrumboard');
+      source.cancel();
+    };
   }, [dispatch, user]);
 
   useEffect(() => {

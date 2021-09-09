@@ -12,7 +12,7 @@ import {
   UPDATE_AUTH_USER,
 } from '../../types/actions/Auth.actions';
 
-// ! this link comes from an email -- redirect to site? This will take the query params and asset it into the axios post
+// ! this link comes from an email -- redirect to site? This will take the query params and set it into the axios post
 export const onJwtUserSignUp = (body: {
   email: string;
   password: string;
@@ -26,8 +26,10 @@ export const onJwtUserSignUp = (body: {
       dispatch(setJWTToken(res.data.token));
       await loadJWTUser(dispatch);
     } catch (err) {
-      console.log('error!!!!', err.response.data.error);
-      dispatch(fetchError(err.response.data.error));
+      if (err instanceof Error) {
+        console.log('error!!!!', err.message);
+        dispatch(fetchError(err.message));
+      }
     }
   };
 };
@@ -41,8 +43,10 @@ export const onJwtSignIn = (body: {email: string; password: string}) => {
       dispatch(setJWTToken(res.data.token));
       await loadJWTUser(dispatch);
     } catch (err) {
-      console.log('error!!!!', err.response.data.error);
-      dispatch(fetchError(err.response.data.error));
+      if (err instanceof Error) {
+        console.log('error!!!!', err.message);
+        dispatch(fetchError(err.message));
+      }
     }
   };
 };
@@ -54,27 +58,27 @@ export const loadJWTUser = async (dispatch: Dispatch<AppActions>) => {
     dispatch(fetchSuccess());
     return;
   }
+  dispatch(setJWTToken(token));
 
   const decoded = jwtManager.parseJWT(token);
   if (!decoded) return onJWTAuthSignout();
 
   try {
-    // const token = localStorage.getItem('token');
-    // const decoded = jwtManager.parseJWT(token);
-    // if (!decoded) return onJWTAuthSignout();
+    console.log('loadJWTUser still running...');
     const res = await jwtAxios.get(`user/${decoded.id}`);
     dispatch(fetchSuccess());
     dispatch({
       type: UPDATE_AUTH_USER,
       payload: getUserObject(res.data),
     });
-    dispatch(setJWTToken(token)); // ! added
     // initiates token refresh, even when page is reloaded
     // Do not 'await', as loading will last as long as timeout does.
     jwtManager.refreshToken();
   } catch (err) {
-    console.log('error!!!!', err.response.error);
-    dispatch(fetchError(err.response.error));
+    if (err instanceof Error) {
+      console.log('error!!!!', err.message);
+      dispatch(fetchError(err.message));
+    }
   }
 };
 
@@ -107,8 +111,10 @@ export const onJWTAuthSignout = () => {
         jwtManager.eraseToken();
       }, 500);
     } catch (err) {
-      console.log('error!!!!', err);
-      dispatch(fetchError(err.response.error));
+      if (err instanceof Error) {
+        console.log('error!!!!', err.message);
+        dispatch(fetchError(err.message));
+      }
     }
   };
 };

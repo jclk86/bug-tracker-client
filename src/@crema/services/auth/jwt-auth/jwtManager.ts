@@ -22,53 +22,26 @@ export const jwtManager = () => {
   };
 
   const refreshToken = async (delay?: number) => {
-    refreshTimeOutId = await wait(15000);
-    return postRefreshToken();
+    refreshTimeOutId = setTimeout(postRefreshToken, 10000);
+    // refreshTimeOutId = await wait(15000).then(() => {
+    //   postRefreshToken();
+    // });
   };
 
   const postRefreshToken = async () => {
-    // return jwtAxios
-    //   .post('refreshToken')
-    //   .then((res) => {
-    //     if (res.status !== 201) {
-    //       store.dispatch({type: SIGNOUT_AUTH_SUCCESS});
-    //       eraseToken();
-    //       return {data: {token: null}};
-    //     }
-    //     return res;
-    //   })
-    //   .then((res) => {
-    //     if (res.data.token) {
-    //       localStorage.setItem('token', res.data.token);
-    //       const decoded = parseJWT(res.data.token);
-    //       const user = jwtAxios.get(`user/${decoded?.id}`);
-    //       store.dispatch({
-    //         type: UPDATE_AUTH_USER,
-    //         payload: getUserObject(user),
-    //       });
-    //       setAuthToken(decoded?.id!);
-    //       store.dispatch({type: SET_AUTH_TOKEN, payload: res.data.token});
-    //       refreshToken();
-    //     }
-    //     return res.data.token;
-    //   });
-  
-
-    if(!localStorage.getItem('token')) {
-      
-    }
-
     try {
       dispatch(fetchStart());
       const res = await jwtAxios.post('refreshToken');
+      // Ensures user isn't null after token refresh.
       const decoded = parseJWT(res.data.token) as AuthUser;
       const user = await jwtAxios.get(`user/${decoded.id}`);
       dispatch({
         type: UPDATE_AUTH_USER,
         payload: getUserObject(user),
       });
-      setAuthToken(decoded.id);
+      setAuthToken(res.data.token);
       dispatch({type: SET_AUTH_TOKEN, payload: res.data.token});
+
       refreshToken();
     } catch (err) {
       dispatch(fetchError('Not Authorized'));
@@ -103,6 +76,7 @@ export const jwtManager = () => {
     parseJWT,
     eraseToken,
     abortRefreshToken,
+    refreshTimeOutId,
   };
 };
 
