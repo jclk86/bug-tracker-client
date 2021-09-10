@@ -10,7 +10,7 @@ import IntlMessages from '../../../@crema/utility/IntlMessages';
 import {makeStyles} from '@material-ui/core/styles';
 import {Fonts} from '../../../shared/constants/AppEnums';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   imgRoot: {
     cursor: 'pointer',
     display: 'inline-block',
@@ -115,27 +115,23 @@ const Signin: React.FC<{}> = () => {
             textColor='primary'
             aria-label='simple tabs example'
             className={classes.muiTabsFull}>
-            <Tab
+            {/* <Tab
               className={classes.muiTab}
               label='aws cognito'
               {...a11yProps(1)}
-            />
-            <Tab
-              className={classes.muiTab}
-              label='jwt auth'
-              {...a11yProps(2)}
-            />
-            <Tab
+            /> */}
+            <Tab className={classes.muiTab} label='user' {...a11yProps(1)} />
+            {/* <Tab
               className={classes.muiTab}
               label='firebase'
               {...a11yProps(0)}
-            />
+            />*/}
           </Tabs>
 
           <>
-            {value === 0 && <SigninAwsCognito />}
+            {/* {value === 0 && <SigninAwsCognito />} */}
             {value === 1 && <SigninJwtAuth />}
-            {value === 2 && <SigninFirebase />}
+            {/* {value === 2 && <SigninFirebase />} */}
           </>
         </Card>
       </Box>

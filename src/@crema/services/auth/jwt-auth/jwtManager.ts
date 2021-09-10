@@ -15,12 +15,6 @@ const {dispatch} = configureStore();
 export const jwtManager = () => {
   let refreshTimeOutId: any;
 
-  const wait = (ms: number) => {
-    return new Promise((resolve) =>
-      window.setTimeout(() => resolve('refreshing'), ms),
-    );
-  };
-
   const refreshToken = async (delay?: number) => {
     refreshTimeOutId = setTimeout(postRefreshToken, 10000);
     // refreshTimeOutId = await wait(15000).then(() => {

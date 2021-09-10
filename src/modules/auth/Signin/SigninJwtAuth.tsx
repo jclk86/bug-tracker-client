@@ -78,16 +78,13 @@ const MyTextField = (props: any) => {
 };
 
 const validationSchema = yup.object({
-  email: yup
-    .string()
-    .email('Invalid Email')
-    .required('Email required'),
+  email: yup.string().email('Invalid Email').required('Email required'),
   password: yup.string().required('Password required'),
 });
 
 interface UserSigninProps {}
 
-const SigninJwtAuth: React.FC<UserSigninProps> = props => {
+const SigninJwtAuth: React.FC<UserSigninProps> = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -205,21 +202,21 @@ const SigninJwtAuth: React.FC<UserSigninProps> = props => {
           )}
         </Formik>
       </Box>
-      <Box
-        bgcolor={grey[100]}
-        px={{xs: 6, sm: 10, xl: 15}}
-        py={{xs: 3, xl: 4}}
-        display='flex'
-        justifyContent='center'
-        alignItems='center'>
-        <Button
-          variant='contained'
-          color='primary'
-          className={clsx(classes.btnRoot, classes.btnRootFull)}
-          onClick={() => dispatch(onSignInAuth0User())}>
-          <IntlMessages id='auth.loginWithAuth0' />
-        </Button>
-      </Box>
+      {/* {<Box
+      bgcolor={grey[100]}
+      px={{xs: 6, sm: 10, xl: 15}}
+      py={{xs: 3, xl: 4}}
+      display='flex'
+      justifyContent='center'
+      alignItems='center'>
+      <Button
+        variant='contained'
+        color='primary'
+        className={clsx(classes.btnRoot, classes.btnRootFull)}
+        onClick={() => dispatch(onSignInAuth0User())}>
+        <IntlMessages id='auth.loginWithAuth0' />
+      </Button>
+    </Box>} */}
 
       <InfoView />
     </Box>
