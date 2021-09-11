@@ -136,7 +136,16 @@ const SignupFirebase: React.FC<{}> = () => {
             <Form className={classes.formRoot} noValidate autoComplete='off'>
               <Box mb={{xs: 5, xl: 8}}>
                 <MyTextField
-                  label={<IntlMessages id='common.name' />}
+                  label={<IntlMessages id='common.firstName' />}
+                  name='name'
+                  variant='outlined'
+                  className={classes.myTextFieldRoot}
+                />
+              </Box>
+
+              <Box mb={{xs: 5, xl: 8}}>
+                <MyTextField
+                  label={<IntlMessages id='common.lastName' />}
                   name='name'
                   variant='outlined'
                   className={classes.myTextFieldRoot}

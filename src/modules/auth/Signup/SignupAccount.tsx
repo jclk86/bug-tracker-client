@@ -183,6 +183,7 @@ const SignupFirebase: React.FC<{}> = () => {
                 alignItems={{sm: 'center'}}
                 justifyContent={{sm: 'space-between'}}>
                 <Button
+                  onClick={() => console.log('CLICKED!!!')}
                   variant='contained'
                   color='secondary'
                   disabled={isSubmitting}

@@ -120,7 +120,7 @@ const Signup: React.FC<{}> = () => {
               label='aws cognito'
               {...a11yProps(1)}
             />} */}
-            <Tab className={classes.muiTab} label='user' {...a11yProps(2)} />
+            <Tab className={classes.muiTab} label='user' {...a11yProps(0)} />
             {
               <Tab
                 className={classes.muiTab}

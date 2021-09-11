@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
-import SigninAwsCognito from './SigninAwsCognito';
+// import React, {useState} from 'react';
+import React from 'react';
+// import Tab from '@material-ui/core/Tab';
+// import Tabs from '@material-ui/core/Tabs';
+// import SigninAwsCognito from './SigninAwsCognito';
 import SigninJwtAuth from './SigninJwtAuth';
-import SigninFirebase from './SigninFirebase';
+// import SigninFirebase from './SigninFirebase';
 import Card from '@material-ui/core/Card';
 import Box from '@material-ui/core/Box';
 import IntlMessages from '../../../@crema/utility/IntlMessages';
@@ -67,18 +68,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Signin: React.FC<{}> = () => {
-  const [value, setValue] = useState(1);
+  // const [value, setValue] = useState(0);
 
-  const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
-  };
+  // const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+  //   setValue(newValue);
+  // };
 
-  const a11yProps = (index: number) => {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  };
+  // const a11yProps = (index: number) => {
+  //   return {
+  //     id: `simple-tab-${index}`,
+  //     'aria-controls': `simple-tabpanel-${index}`,
+  //   };
+  // };
 
   const classes = useStyles();
 
@@ -108,31 +109,32 @@ const Signin: React.FC<{}> = () => {
               <IntlMessages id='common.login' />
             </Box>
           </Box>
-          <Tabs
+          {/* <Tabs
             value={value}
             onChange={handleChange}
             indicatorColor='primary'
             textColor='primary'
             aria-label='simple tabs example'
             className={classes.muiTabsFull}>
-            {/* <Tab
+            <Tab
               className={classes.muiTab}
               label='aws cognito'
               {...a11yProps(1)}
-            /> */}
-            <Tab className={classes.muiTab} label='user' {...a11yProps(1)} />
-            {/* <Tab
+            />
+            <Tab className={classes.muiTab} label='user' {...a11yProps(0)} />
+            <Tab
               className={classes.muiTab}
               label='firebase'
-              {...a11yProps(0)}
-            />*/}
-          </Tabs>
+              {...a11yProps(1)}
+            />
+          </Tabs> */}
 
           <>
             {/* {value === 0 && <SigninAwsCognito />} */}
-            {value === 1 && <SigninJwtAuth />}
-            {/* {value === 2 && <SigninFirebase />} */}
+            {/* {value === 0 && <SigninJwtAuth />} */}
+            {/* {value === 1 && <SigninFirebase />} */}
           </>
+          <SigninJwtAuth />
         </Card>
       </Box>
     </Box>
