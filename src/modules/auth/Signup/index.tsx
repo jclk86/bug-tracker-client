@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
+import SignupAccount from './SignupAccount';
 import SignupAwsCognito from './SignupAwsCognito';
 import SignupJwtAuth from './SignupJwtAuth';
 import SignupFirebase from './SignupFirebase';
@@ -119,22 +120,20 @@ const Signup: React.FC<{}> = () => {
               label='aws cognito'
               {...a11yProps(1)}
             />} */}
-            <Tab
-              className={classes.muiTab}
-              label='user'
-              {...a11yProps(2)}
-            />
-            {/* {<Tab
-              className={classes.muiTab}
-              label='firebase'
-              {...a11yProps(0)}
-            />} */}
+            <Tab className={classes.muiTab} label='user' {...a11yProps(2)} />
+            {
+              <Tab
+                className={classes.muiTab}
+                label='Company'
+                {...a11yProps(0)}
+              />
+            }
           </Tabs>
 
           <>
             {/* {value === 0 && <SignupAwsCognito />} */}
             {value === 0 && <SignupJwtAuth />}
-            {/* {value === 2 && <SignupFirebase />} */}
+            {value === 1 && <SignupAccount />}
           </>
         </Card>
       </Box>

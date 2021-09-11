@@ -136,7 +136,7 @@ const SignupFirebase: React.FC<{}> = () => {
             <Form className={classes.formRoot} noValidate autoComplete='off'>
               <Box mb={{xs: 5, xl: 8}}>
                 <MyTextField
-                  label={<IntlMessages id='common.name' />}
+                  label={<IntlMessages id='common.company' />}
                   name='name'
                   variant='outlined'
                   className={classes.myTextFieldRoot}
@@ -151,32 +151,6 @@ const SignupFirebase: React.FC<{}> = () => {
                   className={classes.myTextFieldRoot}
                 />
               </Box>
-
-              <GridContainer>
-                <Grid item xs={12} md={6}>
-                  <Box mb={{xs: 0, xl: 4}}>
-                    <MyTextField
-                      label={<IntlMessages id='common.password' />}
-                      name='password'
-                      type='password'
-                      variant='outlined'
-                      className={classes.myTextFieldRoot}
-                    />
-                  </Box>
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <Box mb={{xs: 3, xl: 4}}>
-                    <MyTextField
-                      label={<IntlMessages id='common.retypePassword' />}
-                      name='confirmPassword'
-                      type='password'
-                      variant='outlined'
-                      className={classes.myTextFieldRoot}
-                    />
-                  </Box>
-                </Grid>
-              </GridContainer>
 
               <Box
                 mb={{xs: 3, xl: 4}}
