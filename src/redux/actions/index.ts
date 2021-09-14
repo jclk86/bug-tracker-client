@@ -4,6 +4,7 @@ export * from './FirebaseAuth';
 export * from './Auth0';
 export * from './AWSCognito';
 export * from './JWTAuth';
+export * from './CompanyAccount';
 export * from './Setting';
 export * from './ChatApp';
 export * from './MailApp';

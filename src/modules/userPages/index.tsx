@@ -21,10 +21,9 @@ export const userPagesConfig = [
     ],
   },
   {
-    auth: authRole.user,
     routes: [
       {
-        path: '/user/sign-up-1',
+        path: '/user/signup/:accountId',
         component: React.lazy(() => import('./UserPages/Signup')),
       },
     ],

@@ -9,38 +9,38 @@ export const authRouteConfig = [
       },
     ],
   },
-  {
-    routes: [
-      {
-        path: '/signup',
-        component: React.lazy(() => import('./Signup')),
-      },
-    ],
-  },
-  {
-    routes: [
-      {
-        path: '/confirm-signup',
-        component: React.lazy(() => import('./ConfirmSignupAwsCognito')),
-      },
-    ],
-  },
-  {
-    routes: [
-      {
-        path: '/reset-password',
-        component: React.lazy(() => import('./ResetPasswordAwsCognito')),
-      },
-    ],
-  },
-  {
-    routes: [
-      {
-        path: '/forget-password',
-        component: React.lazy(() => import('./ForgetPassword')),
-      },
-    ],
-  },
+  // {
+  //   routes: [
+  //     {
+  //       path: '/signup',
+  //       component: React.lazy(() => import('./Signup')),
+  //     },
+  //   ],
+  // },
+  // {
+  //   routes: [
+  //     {
+  //       path: '/confirm-signup',
+  //       component: React.lazy(() => import('./ConfirmSignupAwsCognito')),
+  //     },
+  //   ],
+  // },
+  // {
+  //   routes: [
+  //     {
+  //       path: '/reset-password',
+  //       component: React.lazy(() => import('./ResetPasswordAwsCognito')),
+  //     },
+  //   ],
+  // },
+  // {
+  //   routes: [
+  //     {
+  //       path: '/forget-password',
+  //       component: React.lazy(() => import('./ForgetPassword')),
+  //     },
+  //   ],
+  // },
   {
     routes: [
       {

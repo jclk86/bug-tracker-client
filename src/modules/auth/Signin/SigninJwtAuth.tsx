@@ -188,7 +188,7 @@ const SigninJwtAuth: React.FC<UserSigninProps> = (props) => {
                   </Box>
                   <Box component='span'>
                     <Link
-                      to='/signup'
+                      to='/company/signup'
                       className={clsx(
                         classes.underlineNone,
                         classes.colorTextPrimary,

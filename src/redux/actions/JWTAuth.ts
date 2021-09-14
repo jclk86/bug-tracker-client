@@ -16,7 +16,8 @@ import {
 export const onJwtUserSignUp = (body: {
   email: string;
   password: string;
-  name: string;
+  firstName: string;
+  lastName: string;
 }) => {
   return async (dispatch: Dispatch<AppActions>) => {
     dispatch(fetchStart());

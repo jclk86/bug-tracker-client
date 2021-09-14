@@ -70,7 +70,12 @@ const Signup = () => {
   const {messages} = useIntl();
 
   const validationSchema = yup.object({
-    name: yup.string().required(messages['validation.nameRequired'] as string),
+    firstName: yup
+      .string()
+      .required(messages['validation.firstNameRequired'] as string),
+    lastName: yup
+      .string()
+      .required(messages['validation.lastNameRequired'] as string),
     email: yup
       .string()
       .email(messages['validation.emailFormat'] as string)
@@ -115,7 +120,8 @@ const Signup = () => {
           <Formik
             validateOnChange={true}
             initialValues={{
-              name: '',
+              firstName: '',
+              lastName: '',
               email: '',
               password: '',
               confirmPassword: '',
@@ -136,8 +142,17 @@ const Signup = () => {
               <Form className={classes.form} noValidate autoComplete='off'>
                 <Box mb={{xs: 5, xl: 8}}>
                   <MyTextField
-                    label={<IntlMessages id='common.name' />}
-                    name='name'
+                    label={<IntlMessages id='common.firstName' />}
+                    name='firstName'
+                    variant='outlined'
+                    className={classes.textField}
+                  />
+                </Box>
+
+                <Box mb={{xs: 5, xl: 8}}>
+                  <MyTextField
+                    label={<IntlMessages id='common.lastName' />}
+                    name='lastName'
                     variant='outlined'
                     className={classes.textField}
                   />

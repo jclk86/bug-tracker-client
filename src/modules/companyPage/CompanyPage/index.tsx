@@ -1,15 +1,10 @@
 import React from 'react';
-// import React, {useState} from 'react';
-// import Tab from '@material-ui/core/Tab';
-// import Tabs from '@material-ui/core/Tabs';
-// import SignupAwsCognito from './SignupAwsCognito';
-import SignupJwtAuth from './SignupJwtAuth';
-// import SignupFirebase from './SignupFirebase';
 import Card from '@material-ui/core/Card';
 import Box from '@material-ui/core/Box';
-import IntlMessages from '../../../@crema/utility/IntlMessages';
+import IntlMessages from '@crema/utility/IntlMessages';
 import {makeStyles} from '@material-ui/core/styles';
-import {Fonts} from '../../../shared/constants/AppEnums';
+import {Fonts} from 'shared/constants/AppEnums';
+import SignupAccount from './SignupAccount';
 
 const useStyles = makeStyles((theme) => ({
   imgRoot: {
@@ -67,19 +62,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const Signup: React.FC<{}> = () => {
-  // const [value, setValue] = useState(0);
-
-  // const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-  //   setValue(newValue);
-  // };
-
-  // const a11yProps = (index: number) => {
-  //   return {
-  //     id: `simple-tab-${index}`,
-  //     'aria-controls': `simple-tabpanel-${index}`,
-  //   };
-  // };
-
   const classes = useStyles();
 
   return (
@@ -108,35 +90,7 @@ const Signup: React.FC<{}> = () => {
               <IntlMessages id='common.signup' />
             </Box>
           </Box>
-          {/* <Tabs
-            value={value}
-            onChange={handleChange}
-            indicatorColor='primary'
-            textColor='primary'
-            aria-label='simple tabs example'
-            className={classes.muiTabsFull}>
-            <Tab
-              className={classes.muiTab}
-              label='aws cognito'
-              {...a11yProps(1)}
-            />
-            <Tab
-              className={classes.muiTab}
-              label='jwt auth'
-              {...a11yProps(2)}
-            />
-            <Tab
-              className={classes.muiTab}
-              label='firebase'
-              {...a11yProps(0)}
-            />
-          </Tabs> */}
-
-          <>
-            {/* {value === 0 && <SignupAwsCognito />} */}
-            <SignupJwtAuth />
-            {/* {value === 2 && <SignupFirebase />} */}
-          </>
+          <SignupAccount />
         </Card>
       </Box>
     </Box>

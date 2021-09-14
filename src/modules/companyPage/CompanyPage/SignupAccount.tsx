@@ -7,18 +7,16 @@ import * as yup from 'yup';
 import {useDispatch} from 'react-redux';
 
 import InfoView from '@crema/core/InfoView';
-import {onJwtUserSignUp} from '../../../redux/actions';
+import {onCompanySignUp} from 'redux/actions';
 import {Link} from 'react-router-dom';
 import Box from '@material-ui/core/Box';
-import IntlMessages from '../../../@crema/utility/IntlMessages';
+import IntlMessages from '@crema/utility/IntlMessages';
 import {makeStyles} from '@material-ui/core/styles';
 import clsx from 'clsx';
-import {Fonts} from '../../../shared/constants/AppEnums';
-import Grid from '@material-ui/core/Grid';
-import {GridContainer} from '../../../@crema';
-import grey from '@material-ui/core/colors/grey';
-import {CremaTheme} from '../../../types/AppContextPropsType';
+import {Fonts} from 'shared/constants/AppEnums';
+import {CremaTheme} from 'types/AppContextPropsType';
 import {useIntl} from 'react-intl';
+import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles((theme: CremaTheme) => ({
   formRoot: {
@@ -79,20 +77,17 @@ const MyTextField = (props: any) => {
 };
 
 const SignupFirebase: React.FC<{}> = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const {messages} = useIntl();
   const validationSchema = yup.object({
-    name: yup.string().required(messages['validation.nameRequired'] as string),
+    companyName: yup
+      .string()
+      .required(messages['validation.companyNameRequired'] as string),
     email: yup
       .string()
       .email(messages['validation.emailFormat'] as string)
       .required(messages['validation.emailRequired'] as string),
-    password: yup
-      .string()
-      .required(messages['validation.passwordRequired'] as string),
-    confirmPassword: yup
-      .string()
-      .required(messages['validation.reTypePassword'] as string),
   });
 
   const classes = useStyles();
@@ -107,37 +102,26 @@ const SignupFirebase: React.FC<{}> = () => {
         <Formik
           validateOnChange={true}
           initialValues={{
-            name: '',
+            companyName: '',
             email: '',
-            password: '',
-            confirmPassword: '',
           }}
           validationSchema={validationSchema}
           onSubmit={(data, {setErrors, setSubmitting}) => {
-            if (data.password !== data.confirmPassword) {
-              setErrors({
-                confirmPassword: messages[
-                  'validation.passwordMisMatch'
-                ] as string,
-              });
-            } else {
-              setSubmitting(true);
-              dispatch(
-                onJwtUserSignUp({
-                  email: data.email,
-                  password: data.password,
-                  name: data.name,
-                }),
-              );
-              setSubmitting(false);
-            }
+            setSubmitting(true);
+            dispatch(
+              onCompanySignUp({
+                email: data.email,
+                companyName: data.companyName,
+              }),
+            );
+            setSubmitting(false);
           }}>
           {({isSubmitting}) => (
             <Form className={classes.formRoot} noValidate autoComplete='off'>
               <Box mb={{xs: 5, xl: 8}}>
                 <MyTextField
                   label={<IntlMessages id='common.company' />}
-                  name='name'
+                  name='companyName'
                   variant='outlined'
                   className={classes.myTextFieldRoot}
                 />
@@ -183,7 +167,6 @@ const SignupFirebase: React.FC<{}> = () => {
                 alignItems={{sm: 'center'}}
                 justifyContent={{sm: 'space-between'}}>
                 <Button
-                  onClick={() => console.log('CLICKED!!!')}
                   variant='contained'
                   color='secondary'
                   disabled={isSubmitting}

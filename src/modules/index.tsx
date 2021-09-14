@@ -13,6 +13,7 @@ import {userListConfig} from './userList';
 import {menuLevelConfig} from './menu';
 import {thirdPartyConfigs} from './thirdParty';
 import {userPagesConfig} from './userPages';
+import {companyPageConfig} from './companyPage';
 
 const routeConfigs = [
   ...authRouteConfig,
@@ -24,6 +25,7 @@ const routeConfigs = [
   ...appsConfig,
   ...thirdPartyConfigs,
   ...userPagesConfig,
+  ...companyPageConfig,
   ...errorPagesConfigs,
 ];
 

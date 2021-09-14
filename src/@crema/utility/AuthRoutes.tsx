@@ -42,7 +42,8 @@ const AuthRoutes: React.FC<AuthRoutesProps> = ({children}) => {
         initialPath === '/' &&
         [
           '/signin',
-          '/signup',
+          '/company/signup',
+          '/user/signup',
           '/confirm-signup',
           '/reset-password',
           '/error-pages/error-404',
@@ -92,7 +93,8 @@ const AuthRoutes: React.FC<AuthRoutesProps> = ({children}) => {
         if (
           pathname === '/' ||
           pathname === '/signin' ||
-          pathname === '/signup'
+          pathname === '/company/signup' ||
+          pathname === '/user/signup'
         ) {
           history.push(initialUrl);
         } else {

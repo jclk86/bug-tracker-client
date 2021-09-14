@@ -16,7 +16,6 @@ import clsx from 'clsx';
 import {Fonts} from '../../../shared/constants/AppEnums';
 import Grid from '@material-ui/core/Grid';
 import {GridContainer} from '../../../@crema';
-import grey from '@material-ui/core/colors/grey';
 import {CremaTheme} from '../../../types/AppContextPropsType';
 import {useIntl} from 'react-intl';
 
@@ -82,7 +81,12 @@ const SignupFirebase: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const {messages} = useIntl();
   const validationSchema = yup.object({
-    name: yup.string().required(messages['validation.nameRequired'] as string),
+    firstName: yup
+      .string()
+      .required(messages['validation.firstNameRequired'] as string),
+    lastName: yup
+      .string()
+      .required(messages['validation.lastNameRequired'] as string),
     email: yup
       .string()
       .email(messages['validation.emailFormat'] as string)
@@ -107,7 +111,8 @@ const SignupFirebase: React.FC<{}> = () => {
         <Formik
           validateOnChange={true}
           initialValues={{
-            name: '',
+            firstName: '',
+            lastName: '',
             email: '',
             password: '',
             confirmPassword: '',
@@ -126,7 +131,8 @@ const SignupFirebase: React.FC<{}> = () => {
                 onJwtUserSignUp({
                   email: data.email,
                   password: data.password,
-                  name: data.name,
+                  firstName: data.firstName,
+                  lastName: data.lastName,
                 }),
               );
               setSubmitting(false);
@@ -137,7 +143,7 @@ const SignupFirebase: React.FC<{}> = () => {
               <Box mb={{xs: 5, xl: 8}}>
                 <MyTextField
                   label={<IntlMessages id='common.firstName' />}
-                  name='name'
+                  name='firstName'
                   variant='outlined'
                   className={classes.myTextFieldRoot}
                 />
@@ -146,7 +152,7 @@ const SignupFirebase: React.FC<{}> = () => {
               <Box mb={{xs: 5, xl: 8}}>
                 <MyTextField
                   label={<IntlMessages id='common.lastName' />}
-                  name='name'
+                  name='lastName'
                   variant='outlined'
                   className={classes.myTextFieldRoot}
                 />
