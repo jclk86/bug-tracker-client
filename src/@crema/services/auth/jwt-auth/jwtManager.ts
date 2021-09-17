@@ -25,10 +25,10 @@ export const jwtManager = () => {
   const postRefreshToken = async () => {
     try {
       dispatch(fetchStart());
-      const res = await jwtAxios.post('refreshToken');
+      const res = await jwtAxios.post('/refreshToken');
       // Ensures user isn't null after token refresh.
       const decoded = parseJWT(res.data.token) as AuthUser;
-      const user = await jwtAxios.get(`user/${decoded.id}`);
+      const user = await jwtAxios.get(`/user/${decoded.id}`);
       dispatch({
         type: UPDATE_AUTH_USER,
         payload: getUserObject(user),

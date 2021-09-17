@@ -16,13 +16,14 @@ import {
 export const onJwtUserSignUp = (body: {
   email: string;
   password: string;
+  role: string;
   firstName: string;
   lastName: string;
 }) => {
   return async (dispatch: Dispatch<AppActions>) => {
     dispatch(fetchStart());
     try {
-      const res = await jwtAxios.post('users', body);
+      const res = await jwtAxios.post('/user', body);
       localStorage.setItem('token', res.data.token);
       dispatch(setJWTToken(res.data.token));
       await loadJWTUser(dispatch);
@@ -39,7 +40,7 @@ export const onJwtSignIn = (body: {email: string; password: string}) => {
   return async (dispatch: Dispatch<AppActions>) => {
     dispatch(fetchStart());
     try {
-      const res = await jwtAxios.post('login', body);
+      const res = await jwtAxios.post('/login', body);
       localStorage.setItem('token', res.data.token);
       dispatch(setJWTToken(res.data.token));
       await loadJWTUser(dispatch);
@@ -66,7 +67,7 @@ export const loadJWTUser = async (dispatch: Dispatch<AppActions>) => {
 
   try {
     console.log('loadJWTUser still running...');
-    const res = await jwtAxios.get(`user/${decoded.id}`);
+    const res = await jwtAxios.get(`/user/${decoded.id}`);
     dispatch(fetchSuccess());
     dispatch({
       type: UPDATE_AUTH_USER,
@@ -105,7 +106,7 @@ export const onJWTAuthSignout = () => {
   return async (dispatch: Dispatch<AppActions>) => {
     dispatch(fetchSuccess());
     try {
-      await jwtAxios.delete('logout');
+      await jwtAxios.delete('/logout');
       setTimeout(() => {
         dispatch({type: SIGNOUT_AUTH_SUCCESS});
         dispatch(fetchSuccess());

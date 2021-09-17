@@ -25,7 +25,7 @@ const ScrumBoard = () => {
     async function getData() {
       try {
         const response = await jwtAxios.get(
-          `users/account/${user?.accountId}`,
+          `/users/account/${user?.accountId}`,
           {
             cancelToken: source.token,
           },

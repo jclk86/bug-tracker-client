@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {Checkbox} from '@material-ui/core';
 import {Form, Formik, useField} from 'formik';
 import * as yup from 'yup';
 import {useDispatch} from 'react-redux';
-
 import InfoView from '@crema/core/InfoView';
 import {onJwtUserSignUp} from '../../../redux/actions';
 import {Link} from 'react-router-dom';
@@ -18,6 +17,9 @@ import Grid from '@material-ui/core/Grid';
 import {GridContainer} from '../../../@crema';
 import {CremaTheme} from '../../../types/AppContextPropsType';
 import {useIntl} from 'react-intl';
+
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles((theme: CremaTheme) => ({
   formRoot: {
@@ -62,6 +64,19 @@ const useStyles = makeStyles((theme: CremaTheme) => ({
   textGrey: {
     color: theme.palette.grey[500],
   },
+  selectBox: {
+    width: '100%',
+    cursor: 'pointer',
+    color: theme.palette.text.primary,
+    '& .MuiSelect-select': {
+      paddingLeft: 12,
+    },
+  },
+  selectOption: {
+    cursor: 'pointer',
+    color: theme.palette.text.primary,
+    padding: 8,
+  },
 }));
 
 const MyTextField = (props: any) => {
@@ -77,9 +92,46 @@ const MyTextField = (props: any) => {
   );
 };
 
+interface MySelectMenuProps {
+  roles: string[] | any[];
+  onChange: (value: any) => void;
+  defaultValue: any;
+}
+
+const MySelectMenu: React.FC<MySelectMenuProps> = ({
+  roles = [],
+  onChange,
+  defaultValue = '',
+}) => {
+  const [selectionType, setSelectionType] = useState(defaultValue);
+
+  const handleSelectionType = (event: React.ChangeEvent<{value: unknown}>) => {
+    setSelectionType(event.target.value);
+    onChange(event.target.value);
+  };
+  const classes = useStyles();
+  return (
+    <Select
+      defaultValue={defaultValue}
+      value={selectionType}
+      onChange={handleSelectionType}
+      variant='outlined'
+      className={clsx(classes.selectBox, 'select-box')}>
+      {roles.map((role: any, index: number) => (
+        <MenuItem key={index} value={role} className={classes.selectOption}>
+          {role}
+        </MenuItem>
+      ))}
+    </Select>
+  );
+};
+
 const SignupFirebase: React.FC<{}> = () => {
   const dispatch = useDispatch();
   const {messages} = useIntl();
+  const handleSelectionType = (data: any) => {
+    console.log('data: ', data);
+  };
   const validationSchema = yup.object({
     firstName: yup
       .string()
@@ -113,6 +165,7 @@ const SignupFirebase: React.FC<{}> = () => {
           initialValues={{
             firstName: '',
             lastName: '',
+            role: 'Developer',
             email: '',
             password: '',
             confirmPassword: '',
@@ -131,6 +184,7 @@ const SignupFirebase: React.FC<{}> = () => {
                 onJwtUserSignUp({
                   email: data.email,
                   password: data.password,
+                  role: data.role,
                   firstName: data.firstName,
                   lastName: data.lastName,
                 }),
@@ -158,14 +212,27 @@ const SignupFirebase: React.FC<{}> = () => {
                 />
               </Box>
 
-              <Box mb={{xs: 5, xl: 8}}>
-                <MyTextField
-                  label={<IntlMessages id='common.email' />}
-                  name='email'
-                  variant='outlined'
-                  className={classes.myTextFieldRoot}
-                />
-              </Box>
+              <GridContainer>
+                <Grid item xs={12} md={6}>
+                  <Box mb={{xs: 0, xl: 4}}>
+                    <MyTextField
+                      label={<IntlMessages id='common.email' />}
+                      name='email'
+                      variant='outlined'
+                      className={classes.myTextFieldRoot}
+                    />
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <Box mb={{xs: 3, xl: 4}}>
+                    <MySelectMenu
+                      roles={['Owner', 'Manager', 'Developer']}
+                      defaultValue={'Developer'}
+                      onChange={handleSelectionType}
+                    />
+                  </Box>
+                </Grid>
+              </GridContainer>
 
               <GridContainer>
                 <Grid item xs={12} md={6}>

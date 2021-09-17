@@ -9,14 +9,14 @@ export const authRouteConfig = [
       },
     ],
   },
-  // {
-  //   routes: [
-  //     {
-  //       path: '/signup',
-  //       component: React.lazy(() => import('./Signup')),
-  //     },
-  //   ],
-  // },
+  {
+    routes: [
+      {
+        path: '/user/signup',
+        component: React.lazy(() => import('./Signup')),
+      },
+    ],
+  },
   // {
   //   routes: [
   //     {

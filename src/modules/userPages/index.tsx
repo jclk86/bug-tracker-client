@@ -23,7 +23,7 @@ export const userPagesConfig = [
   {
     routes: [
       {
-        path: '/user/signup/:accountId',
+        path: '/user/sign-up-1',
         component: React.lazy(() => import('./UserPages/Signup')),
       },
     ],
